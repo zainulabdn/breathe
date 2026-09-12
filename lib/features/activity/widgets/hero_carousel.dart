@@ -36,7 +36,13 @@ class _HeroCarouselState extends State<HeroCarousel> {
     viewportFraction: widget.viewportFraction,
   );
 
-  static const _advanceEvery = Duration(seconds: 4);
+  /// Long enough that a card finishes its own motion before it slides away.
+  /// CardBackgroundPainter drifts the bloom on an 8s cycle and runs the orbit
+  /// on a 5s one, and the readout shimmers on 5s. At 4s the card was swapped
+  /// before any of those completed a single pass, so the only motion the eye
+  /// ever registered was the slide itself — the card read as a static image
+  /// being shuffled. 12s leaves ~11s at rest: one full bloom, two orbits.
+  static const _advanceEvery = Duration(seconds: 12);
 
   /// How long to leave the carousel alone after the user touches it. Resuming
   /// immediately fights the user for control of the thing they just grabbed.
