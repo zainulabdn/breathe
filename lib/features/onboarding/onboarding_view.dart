@@ -74,17 +74,11 @@ class _OnboardingViewState extends ConsumerState<OnboardingView>
       return;
     }
 
-    final repository = ref.read(onboardingRepositoryProvider);
-    await repository.saveProfile(_profile);
-    await repository.markComplete();
+    await ref.read(onboardingRepositoryProvider).saveProfile(_profile);
     if (mounted) context.go(Routes.home);
   }
 
-  Future<void> _skip() async {
-    final repository = ref.read(onboardingRepositoryProvider);
-    await repository.markComplete();
-    if (mounted) context.go(Routes.home);
-  }
+  void _skip() => context.go(Routes.home);
 
   @override
   Widget build(BuildContext context) {

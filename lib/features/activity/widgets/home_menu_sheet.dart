@@ -6,7 +6,6 @@ import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text.dart';
 import '../../../core/widgets/pressable.dart';
-import '../../../data/repositories/onboarding_repository.dart';
 
 /// Navigation sheet behind the app bar's menu button.
 ///
@@ -83,14 +82,11 @@ class HomeMenuSheet extends ConsumerWidget {
           _Item(
             icon: Icons.restart_alt_rounded,
             label: 'Replay onboarding',
-            detail: 'Clears the completion flag and restarts the flow',
+            detail: 'Restarts the flow without relaunching',
             accent: AppColors.textTertiary,
-            onTap: () async {
-              await ref.read(onboardingRepositoryProvider).reset();
-              if (context.mounted) {
-                Navigator.of(context).pop();
-                context.go(Routes.onboarding);
-              }
+            onTap: () {
+              Navigator.of(context).pop();
+              context.go(Routes.onboarding);
             },
           ),
         ],

@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import '../../core/motion/motion.dart';
 import '../../core/router/app_router.dart';
 import '../../core/theme/app_colors.dart';
-import '../../data/repositories/onboarding_repository.dart';
 import '../../dots/assembling_dots.dart';
 
 /// Splash: the lung silhouette collapses inward out of scattered dots, the
@@ -52,8 +51,7 @@ class _SplashViewState extends ConsumerState<SplashView>
     }
     if (!mounted) return;
 
-    final onboarded = ref.read(onboardingRepositoryProvider).isComplete;
-    context.go(onboarded ? Routes.home : Routes.onboarding);
+    context.go(Routes.onboarding);
   }
 
   @override

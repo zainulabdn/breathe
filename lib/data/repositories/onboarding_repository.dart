@@ -3,25 +3,24 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/profile_draft.dart';
 
-/// Onboarding completion and the profile it collects.
+/// The profile onboarding collects.
 ///
-/// Backed by `shared_preferences` rather than Hive: this is a completion flag
-/// and four scalars read once at launch, not a queryable record set. Hive still
-/// owns tests and sessions (docs/ARCHITECTURE.md §3). As with every repository
-/// here, callers see only this interface, so the backing store can change
-/// without touching a screen.
+/// Backed by `shared_preferences` rather than Hive: four scalars read once at
+/// launch, not a queryable record set. Hive still owns tests and sessions
+/// (docs/ARCHITECTURE.md §3). As with every repository here, callers see only
+/// this interface, so the backing store can change without touching a screen.
+///
+/// There is deliberately no completion flag: onboarding runs on every launch,
+/// so nothing gates it and nothing needs to record that it happened.
 class OnboardingRepository {
   OnboardingRepository(this._prefs);
 
   final SharedPreferences _prefs;
 
-  static const _kCompleted = 'onboarding.completed';
   static const _kBirthYear = 'profile.birthYear';
   static const _kHeightCm = 'profile.heightCm';
   static const _kSex = 'profile.sex';
   static const _kCigarettes = 'profile.cigarettesPerWeek';
-
-  bool get isComplete => _prefs.getBool(_kCompleted) ?? false;
 
   ProfileDraft readProfile() => ProfileDraft(
         birthYear: _prefs.getInt(_kBirthYear),
@@ -48,12 +47,6 @@ class OnboardingRepository {
     await _prefs.setInt(_kCigarettes, profile.cigarettesPerWeek);
   }
 
-  Future<void> markComplete() => _prefs.setBool(_kCompleted, true);
-
-  /// Exposed for the Phase 6 settings screen and for testing the flow.
-  Future<void> reset() async {
-    await _prefs.remove(_kCompleted);
-  }
 }
 
 /// Overridden in `main()` once SharedPreferences has loaded.
